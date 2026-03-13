@@ -1,0 +1,41 @@
+{
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.24/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.24",
+    "version": "${{APP_VERSION}}",
+    "id": "${{TEAMS_APP_ID}}",
+    "developer": {
+        "name": "ServiceNow CMDB Explorer",
+        "websiteUrl": "https://servicenow-cmdb-mcp.azurewebsites.net",
+        "privacyUrl": "https://servicenow-cmdb-mcp.azurewebsites.net/privacy",
+        "termsOfUseUrl": "https://servicenow-cmdb-mcp.azurewebsites.net/terms"
+    },
+    "name": {
+        "short": "CMDB Explorer",
+        "full": "ServiceNow CMDB Configuration Item Explorer"
+    },
+    "description": {
+        "short": "Search, view, and manage ServiceNow CMDB CIs with dependency graphs.",
+        "full": "CMDB Explorer provides full CRUD operations on ServiceNow CMDB Configuration Items, upstream/downstream dependency graph traversal, and an interactive CI explorer widget with network visualisation. Supports search by name, owner, class, category, IP, and FQDN."
+    },
+    "icons": {
+        "color": "color.png",
+        "outline": "outline.png"
+    },
+    "accentColor": "#0078D4",
+    "composeExtensions": [],
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
+    "copilotAgents": {
+        "declarativeAgents": [
+            {
+                "id": "declarativeAgent",
+                "file": "declarativeAgent.json"
+            }
+        ]
+    },
+    "validDomains": [
+        "servicenow-cmdb-mcp.azurewebsites.net"
+    ]
+}

@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Environment / secrets
+.env
+
+# Deployment artefacts
+publish/
+publish.zip
+
+# React UI build
+ui/ci-explorer/node_modules/
+ui/ci-explorer/dist/
+
+# Build caches
+*.tsbuildinfo
+
+# Diagnostic archives and test files
+logs/
+logs2/
+logs3/
+logs4/
+*.zip
+*.txt
+!README.md
+!SECURITY.md
+!requirements.txt
+!startup.sh
+
+# M365 Agents Toolkit
+appPackage/build/
+env/.env.*.user

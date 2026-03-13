@@ -1,0 +1,185 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.1/schema.json",
+    "schema_version": "v2.4",
+    "name_for_human": "ServiceNow CMDB MCP",
+    "description_for_human": "Search, view, and manage ServiceNow CMDB Configuration Items with dependency graph visualisation",
+    "namespace": "servicenowcmdb",
+    "functions": [
+        {
+            "name": "show_ci_explorer",
+            "description": "Show the CI Explorer dashboard for Configuration Items. Searches the CMDB and displays results with an interactive dependency graph widget.",
+            "x-isConsequential": false,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Search term. Leave empty to list all CIs."
+                    },
+                    "field": {
+                        "type": "string",
+                        "default": "name",
+                        "description": "Field to search: name, owned_by, managed_by, support_group"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "default": "25",
+                        "description": "Max results (1-50)"
+                    }
+                },
+                "required": []
+            }
+        },
+        {
+            "name": "search_configuration_items",
+            "description": "Search for Configuration Items in the ServiceNow CMDB by name, owner, class, category, IP, or FQDN.",
+            "x-isConsequential": false,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": { "type": "string" },
+                    "field": { "type": "string", "default": "name" },
+                    "limit": { "type": "integer", "default": "25" },
+                    "offset": { "type": "integer", "default": "0" }
+                },
+                "required": ["query"]
+            }
+        },
+        {
+            "name": "get_configuration_item",
+            "description": "Get full details of a single Configuration Item by sys_id.",
+            "x-isConsequential": false,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sys_id": { "type": "string", "description": "32-character sys_id" }
+                },
+                "required": ["sys_id"]
+            }
+        },
+        {
+            "name": "list_configuration_items",
+            "description": "List Configuration Items from the CMDB with pagination.",
+            "x-isConsequential": false,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "limit": { "type": "integer", "default": "25" },
+                    "offset": { "type": "integer", "default": "0" },
+                    "order_by": { "type": "string", "default": "name" }
+                },
+                "required": []
+            }
+        },
+        {
+            "name": "create_configuration_item",
+            "description": "Create a new Configuration Item in the CMDB.",
+            "x-isConsequential": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "sys_class_name": { "type": "string", "default": "cmdb_ci" },
+                    "category": { "type": "string" },
+                    "subcategory": { "type": "string" },
+                    "environment": { "type": "string" },
+                    "operational_status": { "type": "string", "default": "1" },
+                    "assigned_to": { "type": "string" },
+                    "ip_address": { "type": "string" },
+                    "fqdn": { "type": "string" },
+                    "short_description": { "type": "string" }
+                },
+                "required": ["name"]
+            }
+        },
+        {
+            "name": "update_configuration_item",
+            "description": "Update an existing Configuration Item. Only non-empty fields are updated.",
+            "x-isConsequential": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sys_id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "category": { "type": "string" },
+                    "environment": { "type": "string" },
+                    "operational_status": { "type": "string" },
+                    "assigned_to": { "type": "string" },
+                    "ip_address": { "type": "string" },
+                    "short_description": { "type": "string" }
+                },
+                "required": ["sys_id"]
+            }
+        },
+        {
+            "name": "delete_configuration_item",
+            "description": "Delete a Configuration Item from the CMDB. This cannot be undone.",
+            "x-isConsequential": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sys_id": { "type": "string" }
+                },
+                "required": ["sys_id"]
+            }
+        },
+        {
+            "name": "get_ci_dependencies",
+            "description": "Get upstream and downstream dependency relationships for a CI. Returns a graph structure.",
+            "x-isConsequential": false,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sys_id": { "type": "string" },
+                    "depth": { "type": "integer", "default": "1", "description": "Traversal depth 1-3" }
+                },
+                "required": ["sys_id"]
+            }
+        }
+    ],
+    "runtimes": [
+        {
+            "type": "RemoteMCPServer",
+            "run_for_functions": [
+                "show_ci_explorer",
+                "search_configuration_items",
+                "get_configuration_item",
+                "list_configuration_items",
+                "create_configuration_item",
+                "update_configuration_item",
+                "delete_configuration_item",
+                "get_ci_dependencies"
+            ],
+            "spec": {
+                "url": "${{MCP_SERVER_URL}}",
+                "mcp_tool_description": {
+                    "tools": [
+                        {
+                            "name": "show_ci_explorer",
+                            "description": "Show the CI Explorer dashboard for Configuration Items. Searches the CMDB and displays results with an interactive dependency graph widget.",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "query": { "type": "string" },
+                                    "field": { "default": "name", "type": "string" },
+                                    "limit": { "default": "25", "type": "integer" }
+                                },
+                                "required": []
+                            },
+                            "_meta": {
+                                "openai/outputTemplate": "ui://servicenow-cmdb/ci-explorer",
+                                "openai/widgetAccessible": true,
+                                "openai/toolInvocation/invoking": "Loading CI Explorer…",
+                                "openai/toolInvocation/invoked": "CI Explorer ready.",
+                                "openai/resultCanProduceWidget": true
+                            }
+                        }
+                    ]
+                }
+            },
+            "auth": {
+                "type": "None"
+            }
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://aka.ms/m365-agents-toolkits/v1.10/yaml.schema.json
+# https://aka.ms/teams-toolkit-declarative-agent
+
+version: v1.10
+
+environmentFolderPath: ./env
+
+provision:
+  - uses: teamsApp/create
+    with:
+      name: CMDB Explorer-${{TEAMSFX_ENV}}
+    writeToEnvironmentFile:
+      teamsAppId: TEAMS_APP_ID
+
+  - uses: teamsApp/zipAppPackage
+    with:
+      manifestPath: ./appPackage/manifest.json
+      outputZipPath: ./appPackage/build/appPackage.${{TEAMSFX_ENV}}.zip
+      outputFolder: ./appPackage/build
+
+  - uses: teamsApp/update
+    with:
+      appPackagePath: ./appPackage/build/appPackage.${{TEAMSFX_ENV}}.zip

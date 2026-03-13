@@ -1,0 +1,24 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.6/schema.json",
+    "version": "v1.6",
+    "name": "CMDB Explorer",
+    "description": "ServiceNow CMDB Configuration Item explorer with dependency graph visualisation. Search, view, create, update, and delete CIs, and explore upstream/downstream relationships.",
+    "instructions": "$[file('instruction.txt')]",
+    "capabilities": [
+        { "name": "CodeInterpreter" }
+    ],
+    "actions": [
+        {
+            "id": "cmdbMcp",
+            "file": "mcp-plugin.json"
+        }
+    ],
+    "conversation_starters": [
+        { "text": "Show me all Configuration Items in the CMDB" },
+        { "text": "Search for servers in the CMDB" },
+        { "text": "Show the dependency graph for our production database" },
+        { "text": "What CIs are owned by the infrastructure team?" },
+        { "text": "Create a new CI for our new application server" },
+        { "text": "Show me all non-operational CIs" }
+    ]
+}
