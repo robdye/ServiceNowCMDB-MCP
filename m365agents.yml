@@ -21,3 +21,4 @@ provision:
   - uses: teamsApp/update
     with:
       appPackagePath: ./appPackage/build/appPackage.${{TEAMSFX_ENV}}.zip
+projectId: 17a289fa-3cc7-461c-b252-370ac5cddaaa
